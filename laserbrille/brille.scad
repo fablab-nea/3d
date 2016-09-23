@@ -1,6 +1,5 @@
 /*
 TODO:
- * Glashalter vor die Löcher bauen
  * Proportionen anhand von Variablen setzten
 */
 
