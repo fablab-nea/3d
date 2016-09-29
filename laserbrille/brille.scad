@@ -4,8 +4,8 @@ TODO:
 */
 
 // define global variables
-diameter_glass = 30; // Default: 30
-thickness_glass = 2.2; // Default: 2.2
+diameter_glass = 33.5; // Default: 33.5
+thickness_glass = 2; // Default: 2
 diameter_nose = 18; // Default: 18
 thickness = 3; // Default: 3
 eye_distance = 64; // Default: 64
@@ -15,7 +15,7 @@ base_radius = 10; // Default: 10
 perimeter=2;
 
 hinge_outer_diameter = 5; // Default: 5
-hinge_inner_diameter = 2; // Default: 2
+hinge_inner_diameter = 3; // Default: 3
 hinge_length = 20; // Default: 20
 hinge_cut_width = 10; // Default: 10
 
