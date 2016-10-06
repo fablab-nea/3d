@@ -1,6 +1,7 @@
 /*
 TODO:
  * Proportionen anhand von Variablen setzten
+ * besser kommentieren
 */
 
 // define global variables
@@ -14,7 +15,10 @@ base_height = 50; // Default: 50
 base_radius = 10; // Default: 10
 perimeter=2;
 
-hinge_outer_diameter = 5; // Default: 5
+nose_clip_height = 3; //Default: 3
+nose_clip_length = 15; //Default: 15
+
+hinge_outer_diameter = 6; // Default: 6
 hinge_inner_diameter = 3; // Default: 3
 hinge_length = 20; // Default: 20
 hinge_cut_width = 10; // Default: 10
@@ -53,11 +57,26 @@ difference(){
             cylinder(d=diameter_nose, h=thickness+dummy, center=true);
         }
         translate([25,0,0]){
-            cube([1,30,thickness+dummy], center=true);
+            cube([1,40,thickness+dummy], center=true);
         }
     }
 }
+// nose clip
 
+ translate([15,18,2])
+    rotate([0,0,19]){
+            cube([nose_clip_length,nose_clip_height,4], center=true);  
+            translate([-7.3,0,1.2])rotate([90,0,90])cylinder(d=3.6,nose_clip_length);
+            translate([-7.3,0,1.2])sphere(d = 4);
+            translate([7.3,0,1.2])sphere(d = 4);
+        }
+ translate([15,-18,2])
+    rotate([0,0,-19]){
+            cube([nose_clip_length+dummy,nose_clip_height+dummy,4], center=true);   
+            translate([-7.3,0,1.2])rotate([90,0,90])cylinder(d=3.6,nose_clip_length);
+            translate([-7.3,0,1.2])sphere(d = 4);
+            translate([7.3,0,1.2])sphere(d = 4);
+    }
 // Hinge
 
 for(y=[-base_width/2+hinge_outer_diameter/2, base_width/2-hinge_outer_diameter/2]) {
@@ -71,3 +90,4 @@ for(y=[-base_width/2+hinge_outer_diameter/2, base_width/2-hinge_outer_diameter/2
             cube([hinge_outer_diameter+dummy,hinge_outer_diameter+dummy,hinge_cut_width], center=true);
     }
 }
+
