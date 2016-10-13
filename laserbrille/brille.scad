@@ -4,6 +4,7 @@ TODO:
  * besser kommentieren
 */
 
+
 // define global variables
 diameter_glass = 33.5; // Default: 33.5
 thickness_glass = 2; // Default: 2
@@ -17,6 +18,9 @@ perimeter=2;
 
 nose_clip_height = 3; //Default: 3
 nose_clip_length = 15; //Default: 15
+nose_clip_base = 40;  //Default: 40
+round_end = 3;      //Default: 3.6
+
 
 hinge_outer_diameter = 6; // Default: 6
 hinge_inner_diameter = 3; // Default: 3
@@ -25,7 +29,29 @@ hinge_cut_width = 10; // Default: 10
 
 dummy = 0.1; // Default: 0.1
 $fn=64; // Default: 64 for preview and 192+ for final render
+module roundedRect(size, radius)
+{
+	x = size[0];
+	y = size[1];
+	z = size[2];
 
+	linear_extrude(height=z)
+	hull()
+	{
+		// place 4 circles in the corners, with the given radius
+		translate([(-x/2)+(radius/2), (-y/2)+(radius/2), 0])
+		circle(r=radius);
+	
+		translate([(x/2)-(radius/2), (-y/2)+(radius/2), 0])
+		circle(r=radius);
+	
+		translate([(-x/2)+(radius/2), (y/2)-(radius/2), 0])
+		circle(r=radius);
+	
+		translate([(x/2)-(radius/2), (y/2)-(radius/2), 0])
+		circle(r=radius);
+	}
+}
 // Create the main frame
 difference(){
     // Create the base cuboid
@@ -57,25 +83,25 @@ difference(){
             cylinder(d=diameter_nose, h=thickness+dummy, center=true);
         }
         translate([25,0,0]){
-            cube([1,40,thickness+dummy], center=true);
+            cube([1,nose_clip_base,thickness+dummy], center=true);
         }
     }
 }
 // nose clip
 
  translate([15,18,2])
-    rotate([0,0,19]){
-            cube([nose_clip_length,nose_clip_height,4], center=true);  
-            translate([-7.3,0,1.2])rotate([90,0,90])cylinder(d=3.6,nose_clip_length);
-            translate([-7.3,0,1.2])sphere(d = 4);
-            translate([7.3,0,1.2])sphere(d = 4);
+    rotate([0,0,19.5]){
+            cube([nose_clip_length,nose_clip_height,3], center=true);  
+            translate([-7.3,0,1.5])rotate([90,0,90])cylinder(d=3,nose_clip_length);
+            translate([-7.3,0,1.5])sphere(d = round_end);
+            translate([7.7,0,1.5])sphere(d = round_end);
         }
  translate([15,-18,2])
-    rotate([0,0,-19]){
-            cube([nose_clip_length+dummy,nose_clip_height+dummy,4], center=true);   
-            translate([-7.3,0,1.2])rotate([90,0,90])cylinder(d=3.6,nose_clip_length);
-            translate([-7.3,0,1.2])sphere(d = 4);
-            translate([7.3,0,1.2])sphere(d = 4);
+    rotate([0,0,-19.5]){
+            cube([nose_clip_length+dummy,nose_clip_height,3], center=true);   
+            translate([-7.3,0,1.5])rotate([90,0,90])cylinder(d=3,nose_clip_length);
+            translate([-7.3,0,1.5])sphere(d = round_end);
+            translate([7.7,0,1.5])sphere(d = round_end);
     }
 // Hinge
 
@@ -90,4 +116,43 @@ for(y=[-base_width/2+hinge_outer_diameter/2, base_width/2-hinge_outer_diameter/2
             cube([hinge_outer_diameter+dummy,hinge_outer_diameter+dummy,hinge_cut_width], center=true);
     }
 }
+
+// Create the main (Buegel)
+
+translate([50,0,2]){
+    minkowski() {
+        cube([13,100,.1], center=true);
+        rotate([90,0,0]) cylinder(d=2.9);
+    }
+    //roundedRect([13, 100, 3], 3, $fn=24); 
+    rotate([0,90,0]) {
+        difference() {
+            union() {
+                translate([-4.5,-47,-5]){
+                    cylinder(d=hinge_outer_diameter, h=hinge_cut_width-0.2);
+                    translate([0,-hinge_outer_diameter/2,0]) cube([hinge_outer_diameter/2,hinge_outer_diameter,hinge_length/2]);
+                }
+            }
+            translate([-4.5,-47,-5.5]) cylinder(d=hinge_inner_diameter, h=hinge_length/2+1); 
+        }
+    }
+}
+        
+    
+translate([-50,0,2])
+            minkowski() {
+        cube([13,100,.1], center=true);
+        rotate([90,0,0]) cylinder(d=2.9);
+            }
+  rotate([0,90,0]) {
+        difference() {
+            union() {
+                translate([-6.5,47,-55]){
+                    cylinder(d=hinge_outer_diameter, h=hinge_cut_width-0.2);
+                    translate([0,-hinge_outer_diameter/2,0]) cube([hinge_outer_diameter/2,hinge_outer_diameter,hinge_length/2]);
+                }
+            }
+            translate([-6.5,47,-55.5]) cylinder(d=hinge_inner_diameter, h=hinge_length/2+1); 
+        }
+    }
 
