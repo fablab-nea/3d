@@ -1,4 +1,4 @@
-Projekte des FabLabs
-====================
+3D-MOdelle des FabLabs
+======================
 
-Hier gibt’s alle Projekte des FabLab Neustatd Aisch/Bad Windsheims.
+Hier gibt’s alle 3D-Modelle die vom FabLab Neustadt Aisch/Bad Windsheim.
