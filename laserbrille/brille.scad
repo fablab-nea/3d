@@ -62,106 +62,110 @@ module roundedRect(size, radius)
 		circle(r=radius);
 	}
 }
+
 // Create the main frame
-difference(){
-    // Create the base cuboid
-    //cube([50,120,thickness],center=true);
-    hull(){
-        for(x=[-base_height/2+base_radius,base_height/2-base_radius], y=[-base_width/2+base_radius, base_width/2-base_radius]){  
-            translate([x,y,0]){
-                // Create the dummy cylinder,
-                cylinder(r=base_radius,h=thickness,center=true);    
-            }
-        }
-    }
+module main_frame() {
+	difference(){
+		// Create the base cuboid
+		//cube([50,120,thickness],center=true);
+		hull(){
+			for(x=[-base_height/2+base_radius,base_height/2-base_radius], y=[-base_width/2+base_radius, base_width/2-base_radius]){  
+				translate([x,y,0]){
+					// Create the dummy cylinder,
+					cylinder(r=base_radius,h=thickness,center=true);    
+				}
+			}
+		}
 
-    // Create cylinder, which is the glass after the print
-    // To move it appart by half the eye distance
-    for(y=[-eye_distance/2, eye_distance/2]){
-        translate([0,y,0]){
-            // Create the dummy glasses, which will be removed later
-            translate([0,0,thickness/2-thickness_glass])
-                cylinder(d=diameter_glass, h=thickness_glass+dummy);
-            // Cut out the rest
-                cylinder(d=diameter_glass-perimeter, h=thickness+dummy, center=true);
-        }
-    }
+		// Create cylinder, which is the glass after the print
+		// To move it appart by half the eye distance
+		for(y=[-eye_distance/2, eye_distance/2]){
+			translate([0,y,0]){
+				// Create the dummy glasses, which will be removed later
+				translate([0,0,thickness/2-thickness_glass])
+					cylinder(d=diameter_glass, h=thickness_glass+dummy);
+				// Cut out the rest
+					cylinder(d=diameter_glass-perimeter, h=thickness+dummy, center=true);
+			}
+		}
 
-    // Create a space for nose
-    hull(){
-        translate([-5,0,0]){
-            cylinder(d=diameter_nose, h=thickness+dummy, center=true);
-        }
-        translate([25,0,0]){
-            cube([1,nose_clip_base,thickness+dummy], center=true);
-        }
-    }
+		// Create a space for nose
+		hull(){
+			translate([-5,0,0]){
+				cylinder(d=diameter_nose, h=thickness+dummy, center=true);
+			}
+			translate([25,0,0]){
+				cube([1,nose_clip_base,thickness+dummy], center=true);
+			}
+		}
+	}
+	// nose clip
+
+	 translate([15,18,2])
+		rotate([0,0,19.5]){
+				cube([nose_clip_length,nose_clip_height,3], center=true);  
+				translate([-7.3,0,1.5])rotate([90,0,90])cylinder(d=3,nose_clip_length);
+				translate([-7.3,0,1.5])sphere(d = round_end);
+				translate([7.7,0,1.5])sphere(d = round_end);
+			}
+	 translate([15,-18,2])
+		rotate([0,0,-19.5]){
+				cube([nose_clip_length+dummy,nose_clip_height,3], center=true);   
+				translate([-7.3,0,1.5])rotate([90,0,90])cylinder(d=3,nose_clip_length);
+				translate([-7.3,0,1.5])sphere(d = round_end);
+				translate([7.7,0,1.5])sphere(d = round_end);
+		}
+	// Hinge
+
+	for(y=[-base_width/2+hinge_outer_diameter/2, base_width/2-hinge_outer_diameter/2]) {
+		translate([-hinge_length/2,y,thickness/2+hinge_outer_diameter/2]) rotate([0,90,0]) difference() {
+			union() {
+				cylinder(d=hinge_outer_diameter, h=hinge_length);
+				translate([0,-hinge_outer_diameter/2,0]) cube([hinge_outer_diameter/2,hinge_outer_diameter,hinge_length]);
+			}
+			translate([0,0,-dummy]) cylinder(d=hinge_inner_diameter, h=hinge_length+2*dummy);
+			translate([0,0,hinge_length/2])
+				cube([hinge_outer_diameter+dummy,hinge_outer_diameter+dummy,hinge_cut_width], center=true);
+		}
+	}
 }
-// nose clip
 
- translate([15,18,2])
-    rotate([0,0,19.5]){
-            cube([nose_clip_length,nose_clip_height,3], center=true);  
-            translate([-7.3,0,1.5])rotate([90,0,90])cylinder(d=3,nose_clip_length);
-            translate([-7.3,0,1.5])sphere(d = round_end);
-            translate([7.7,0,1.5])sphere(d = round_end);
-        }
- translate([15,-18,2])
-    rotate([0,0,-19.5]){
-            cube([nose_clip_length+dummy,nose_clip_height,3], center=true);   
-            translate([-7.3,0,1.5])rotate([90,0,90])cylinder(d=3,nose_clip_length);
-            translate([-7.3,0,1.5])sphere(d = round_end);
-            translate([7.7,0,1.5])sphere(d = round_end);
-    }
-// Hinge
-
-for(y=[-base_width/2+hinge_outer_diameter/2, base_width/2-hinge_outer_diameter/2]) {
-    translate([-hinge_length/2,y,thickness/2+hinge_outer_diameter/2]) rotate([0,90,0]) difference() {
-        union() {
-            cylinder(d=hinge_outer_diameter, h=hinge_length);
-            translate([0,-hinge_outer_diameter/2,0]) cube([hinge_outer_diameter/2,hinge_outer_diameter,hinge_length]);
-        }
-        translate([0,0,-dummy]) cylinder(d=hinge_inner_diameter, h=hinge_length+2*dummy);
-        translate([0,0,hinge_length/2])
-            cube([hinge_outer_diameter+dummy,hinge_outer_diameter+dummy,hinge_cut_width], center=true);
-    }
+module side_front() {
+	difference(){
+		translate([40,0,2]){
+			minkowski() {
+				cube([13,100,.1], center=true);
+				rotate([90,0,0]) cylinder(d=2.9);
+			}
+			rotate([0,90,0]) {
+				difference() {
+					union() {
+						translate([-4.5,-47,-5]){
+							cylinder(d=hinge_outer_diameter, h=hinge_cut_width-0.2);
+							translate([0,-hinge_outer_diameter/2,0]) cube([hinge_outer_diameter/2,hinge_outer_diameter,hinge_length/2]);
+						}
+					}
+					translate([-4.5,-47,-5.5]) cylinder(d=hinge_inner_diameter, h=hinge_length/2+1); 
+				}
+			}
+		}
+		hull(){
+				translate([40,-40,-0]) cylinder(d=3, h=3+1); 
+				translate([40,-10,-0]) cylinder(d=3, h=3+1);
+		}
+		hull(){
+				translate([40,40,-0]) cylinder(d=3, h=3+1); 
+				translate([40,10,-0]) cylinder(d=3, h=3+1);
+		}
+	}
 }
 
-// Create the main side
-for(a=[0,180]) rotate([0,0,a]) difference(){
-    translate([40,0,2]){
-        minkowski() {
-            cube([13,100,.1], center=true);
-            rotate([90,0,0]) cylinder(d=2.9);
-        }
-        rotate([0,90,0]) {
-            difference() {
-                union() {
-                    translate([-4.5,-47,-5]){
-                        cylinder(d=hinge_outer_diameter, h=hinge_cut_width-0.2);
-                        translate([0,-hinge_outer_diameter/2,0]) cube([hinge_outer_diameter/2,hinge_outer_diameter,hinge_length/2]);
-                    }
-                }
-                translate([-4.5,-47,-5.5]) cylinder(d=hinge_inner_diameter, h=hinge_length/2+1); 
-            }
-        }
-    }
-    hull(){
-            translate([40,-40,-0]) cylinder(d=3, h=3+1); 
-            translate([40,-10,-0]) cylinder(d=3, h=3+1);
-    }
-    hull(){
-            translate([40,40,-0]) cylinder(d=3, h=3+1); 
-            translate([40,10,-0]) cylinder(d=3, h=3+1);
-    }
-}        
- 
-for(a=[0,180]) rotate([0,0,a]){ 
-    translate([60,-15,2]){
-        minkowski() {
-            cube([13,70,.1], center=true);
-            rotate([90,0,0]) cylinder(d=2.9);
-        }
+module side_rear() {
+	translate([60,-15,2]){
+		minkowski() {
+			cube([13,70,.1], center=true);
+			rotate([90,0,0]) cylinder(d=2.9);
+		}
 	}
 	translate([60+side_ear_radius+12.9/2,20,2]) intersection() {
 		rotate_extrude() {
@@ -172,12 +176,17 @@ for(a=[0,180]) rotate([0,0,a]){
 		}
 		translate([-100/2,0,-100/2]) cube([100,100,100]);
 	}
-    hull(){
-            translate([60,-45,-0]) cylinder(d=2.9, h=6); 
-            translate([60,-35,-0]) cylinder(d=2.9, h=6);
-    }
-    hull(){
-            translate([60,5,-0]) cylinder(d=2.9, h=6); 
-            translate([60,15,-0]) cylinder(d=2.9, h=6);
-    }
-}    
+	hull(){
+			translate([60,-45,-0]) cylinder(d=2.9, h=6); 
+			translate([60,-35,-0]) cylinder(d=2.9, h=6);
+	}
+	hull(){
+			translate([60,5,-0]) cylinder(d=2.9, h=6); 
+			translate([60,15,-0]) cylinder(d=2.9, h=6);
+	}
+}
+
+main_frame();
+for(a=[0,180]) rotate([0,0,a]) side_front();
+for(a=[0,180]) rotate([0,0,a]) side_rear();
+
