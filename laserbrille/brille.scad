@@ -12,6 +12,14 @@ diameter_nose = 18; // Default: 18
 thickness = 3; // Default: 3
 eye_distance = 64; // Default: 64
 base_width = 120; // Default: 120
+
+// define global variables
+diameter_glass = 33.5; // Default: 33.5
+thickness_glass = 2; // Default: 2
+diameter_nose = 18; // Default: 18
+thickness = 3; // Default: 3
+eye_distance = 64; // Default: 64
+base_width = 120; // Default: 120
 base_height = 50; // Default: 50
 base_radius = 10; // Default: 10
 perimeter=2;
@@ -117,42 +125,55 @@ for(y=[-base_width/2+hinge_outer_diameter/2, base_width/2-hinge_outer_diameter/2
     }
 }
 
-// Create the main (Buegel)
-
-translate([50,0,2]){
-    minkowski() {
-        cube([13,100,.1], center=true);
-        rotate([90,0,0]) cylinder(d=2.9);
-    }
-    //roundedRect([13, 100, 3], 3, $fn=24); 
-    rotate([0,90,0]) {
-        difference() {
-            union() {
-                translate([-4.5,-47,-5]){
-                    cylinder(d=hinge_outer_diameter, h=hinge_cut_width-0.2);
-                    translate([0,-hinge_outer_diameter/2,0]) cube([hinge_outer_diameter/2,hinge_outer_diameter,hinge_length/2]);
+// Create the main side
+for(a=[0,180]) rotate([0,0,a]) difference(){
+    translate([40,0,2]){
+        minkowski() {
+            cube([13,100,.1], center=true);
+            rotate([90,0,0]) cylinder(d=2.9);
+        }
+        rotate([0,90,0]) {
+            difference() {
+                union() {
+                    translate([-4.5,-47,-5]){
+                        cylinder(d=hinge_outer_diameter, h=hinge_cut_width-0.2);
+                        translate([0,-hinge_outer_diameter/2,0]) cube([hinge_outer_diameter/2,hinge_outer_diameter,hinge_length/2]);
+                    }
                 }
+                translate([-4.5,-47,-5.5]) cylinder(d=hinge_inner_diameter, h=hinge_length/2+1); 
             }
-            translate([-4.5,-47,-5.5]) cylinder(d=hinge_inner_diameter, h=hinge_length/2+1); 
         }
     }
-}
-        
+    hull(){
+            translate([40,-40,-0]) cylinder(d=3, h=3+1); 
+            translate([40,-10,-0]) cylinder(d=3, h=3+1);
+    }
+    hull(){
+            translate([40,40,-0]) cylinder(d=3, h=3+1); 
+            translate([40,10,-0]) cylinder(d=3, h=3+1);
+    }
+}        
+ 
+for(a=[0,180]) rotate([0,0,a]){ 
+    translate([60,-15,2]){
+        minkowski() {
+            cube([13,70,.1], center=true);
+            rotate([90,0,0]) cylinder(d=2.9);
+        }
+ /*       difference(){
+            translate([23,35,-1]){
+                #cylinder(d=60, h=3);
+                cylinder(d=35, h=4);
+            }
+    }*/
+    }
     
-translate([-50,0,2])
-            minkowski() {
-        cube([13,100,.1], center=true);
-        rotate([90,0,0]) cylinder(d=2.9);
-            }
-  rotate([0,90,0]) {
-        difference() {
-            union() {
-                translate([-6.5,47,-55]){
-                    cylinder(d=hinge_outer_diameter, h=hinge_cut_width-0.2);
-                    translate([0,-hinge_outer_diameter/2,0]) cube([hinge_outer_diameter/2,hinge_outer_diameter,hinge_length/2]);
-                }
-            }
-            translate([-6.5,47,-55.5]) cylinder(d=hinge_inner_diameter, h=hinge_length/2+1); 
-        }
+    hull(){
+            translate([60,-45,-0]) cylinder(d=2.9, h=6); 
+            translate([60,-35,-0]) cylinder(d=2.9, h=6);
     }
-
+    hull(){
+            translate([60,5,-0]) cylinder(d=2.9, h=6); 
+            translate([60,15,-0]) cylinder(d=2.9, h=6);
+    }
+}    
