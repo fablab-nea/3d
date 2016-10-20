@@ -33,7 +33,9 @@ round_end = 3;      //Default: 3.6
 hinge_outer_diameter = 6; // Default: 6
 hinge_inner_diameter = 3; // Default: 3
 hinge_length = 20; // Default: 20
-hinge_cut_width = 10; // Default: 10
+hinge_cut_width = 10; // Default: 1
+
+side_ear_radius = 20;
 
 dummy = 0.1; // Default: 0.1
 $fn=64; // Default: 64 for preview and 192+ for final render
@@ -160,14 +162,16 @@ for(a=[0,180]) rotate([0,0,a]){
             cube([13,70,.1], center=true);
             rotate([90,0,0]) cylinder(d=2.9);
         }
- /*       difference(){
-            translate([23,35,-1]){
-                #cylinder(d=60, h=3);
-                cylinder(d=35, h=4);
-            }
-    }*/
-    }
-    
+	}
+	translate([60+side_ear_radius+12.9/2,20,2]) intersection() {
+		rotate_extrude() {
+			hull() {
+				translate([side_ear_radius,0,0]) circle(d=3);
+				translate([side_ear_radius+12.9,0,0]) circle(d=3);
+			}
+		}
+		translate([-100/2,0,-100/2]) cube([100,100,100]);
+	}
     hull(){
             translate([60,-45,-0]) cylinder(d=2.9, h=6); 
             translate([60,-35,-0]) cylinder(d=2.9, h=6);
