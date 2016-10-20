@@ -72,7 +72,7 @@ module main_frame() {
 			for(x=[-base_height/2+base_radius,base_height/2-base_radius], y=[-base_width/2+base_radius, base_width/2-base_radius]){  
 				translate([x,y,0]){
 					// Create the dummy cylinder,
-					cylinder(r=base_radius,h=thickness,center=true);    
+					cylinder(r=base_radius,h=thickness);    
 				}
 			}
 		}
@@ -82,33 +82,33 @@ module main_frame() {
 		for(y=[-eye_distance/2, eye_distance/2]){
 			translate([0,y,0]){
 				// Create the dummy glasses, which will be removed later
-				translate([0,0,thickness/2-thickness_glass])
+				translate([0,0,thickness-thickness_glass])
 					cylinder(d=diameter_glass, h=thickness_glass+dummy);
 				// Cut out the rest
-					cylinder(d=diameter_glass-perimeter, h=thickness+dummy, center=true);
+				cylinder(d=diameter_glass-perimeter, h=thickness+dummy, center=true);
 			}
 		}
 
 		// Create a space for nose
 		hull(){
 			translate([-5,0,0]){
-				cylinder(d=diameter_nose, h=thickness+dummy, center=true);
+				cylinder(d=diameter_nose, h=thickness+dummy);
 			}
-			translate([25,0,0]){
+			translate([25,0,thickness/2]){
 				cube([1,nose_clip_base,thickness+dummy], center=true);
 			}
 		}
 	}
 	// nose clip
 
-	 translate([15,18,2])
+	 translate([15,18,2+thickness/2])
 		rotate([0,0,19.5]){
 				cube([nose_clip_length,nose_clip_height,3], center=true);  
 				translate([-7.3,0,1.5])rotate([90,0,90])cylinder(d=3,nose_clip_length);
 				translate([-7.3,0,1.5])sphere(d = round_end);
 				translate([7.7,0,1.5])sphere(d = round_end);
 			}
-	 translate([15,-18,2])
+	 translate([15,-18,2+thickness/2])
 		rotate([0,0,-19.5]){
 				cube([nose_clip_length+dummy,nose_clip_height,3], center=true);   
 				translate([-7.3,0,1.5])rotate([90,0,90])cylinder(d=3,nose_clip_length);
@@ -118,7 +118,7 @@ module main_frame() {
 	// Hinge
 
 	for(y=[-base_width/2+hinge_outer_diameter/2, base_width/2-hinge_outer_diameter/2]) {
-		translate([-hinge_length/2,y,thickness/2+hinge_outer_diameter/2]) rotate([0,90,0]) difference() {
+		translate([-hinge_length/2,y,thickness+hinge_outer_diameter/2]) rotate([0,90,0]) difference() {
 			union() {
 				cylinder(d=hinge_outer_diameter, h=hinge_length);
 				translate([0,-hinge_outer_diameter/2,0]) cube([hinge_outer_diameter/2,hinge_outer_diameter,hinge_length]);
