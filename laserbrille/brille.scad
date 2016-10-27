@@ -1,9 +1,3 @@
-/*
-TODO:
- * Proportionen anhand von Variablen setzten
- * besser kommentieren
-*/
-
 
 // define global variables
 diameter_glass = 33.5; // Default: 33.5
@@ -132,7 +126,7 @@ module main_frame() {
 
 module side_front() {
 	difference(){
-		translate([40,0,2]){
+		translate([40,0,1.5]){
 			minkowski() {
 				cube([13,100,.1], center=true);
 				rotate([90,0,0]) cylinder(d=2.9);
@@ -161,13 +155,13 @@ module side_front() {
 }
 
 module side_rear() {
-	translate([60,-15,2]){
+	translate([60,-15,1.5]){
 		minkowski() {
 			cube([13,70,.1], center=true);
 			rotate([90,0,0]) cylinder(d=2.9);
 		}
 	}
-	translate([60+side_ear_radius+12.9/2,20,2]) intersection() {
+	translate([60+side_ear_radius+12.9/2,20,1.5]) intersection() {
 		rotate_extrude() {
 			hull() {
 				translate([side_ear_radius,0,0]) circle(d=3);
@@ -176,17 +170,25 @@ module side_rear() {
 		}
 		translate([-100/2,0,-100/2]) cube([100,100,100]);
 	}
-	hull(){
+    difference(){
+        hull(){
 			translate([60,-45,-0]) cylinder(d=2.9, h=6); 
 			translate([60,-35,-0]) cylinder(d=2.9, h=6);
-	}
-	hull(){
+        }
+        translate([60,-40,-0.5]){
+            cylinder(d=1.5, h=7); 
+        }
+    }
+    difference(){
+        hull(){
 			translate([60,5,-0]) cylinder(d=2.9, h=6); 
 			translate([60,15,-0]) cylinder(d=2.9, h=6);
-	}
+        }
+        translate([60,10,-0.5]){
+            cylinder(d=1.5, h=7); 
+        }            
+    }
 }
-
 main_frame();
 for(a=[0,180]) rotate([0,0,a]) side_front();
 for(a=[0,180]) rotate([0,0,a]) side_rear();
-
