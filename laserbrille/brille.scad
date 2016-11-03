@@ -110,15 +110,14 @@ module main_frame() {
 				translate([7.7,0,1.5])sphere(d = round_end);
 		}
 	// Hinge
-
 	for(y=[-base_width/2+hinge_outer_diameter/2, base_width/2-hinge_outer_diameter/2]) {
-		translate([-hinge_length/2,y,thickness+hinge_outer_diameter/2]) rotate([0,90,0]) difference() {
+		translate([-hinge_length/2,y,hinge_outer_diameter/2]) rotate([0,90,0]) difference() {
 			union() {
-				cylinder(d=hinge_outer_diameter, h=hinge_length);
-				translate([0,-hinge_outer_diameter/2,0]) cube([hinge_outer_diameter/2,hinge_outer_diameter,hinge_length]);
+				translate([-thickness,0,0]) cylinder(d=hinge_outer_diameter, h=hinge_length);
+				translate([-thickness,-hinge_outer_diameter/2,0]) cube([thickness+hinge_outer_diameter/2,hinge_outer_diameter,hinge_length]);
 			}
-			translate([0,0,-dummy]) cylinder(d=hinge_inner_diameter, h=hinge_length+2*dummy);
-			translate([0,0,hinge_length/2])
+			translate([-thickness,0,-dummy]) cylinder(d=hinge_inner_diameter, h=hinge_length+2*dummy);
+			translate([-thickness,0,hinge_length/2])
 				cube([hinge_outer_diameter+dummy,hinge_outer_diameter+dummy,hinge_cut_width], center=true);
 		}
 	}
