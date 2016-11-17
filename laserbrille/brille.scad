@@ -1,4 +1,3 @@
-
 // define global variables
 diameter_glass = 33.5; // Default: 33.5
 thickness_glass = 2; // Default: 2
@@ -127,28 +126,28 @@ module side_front() {
 	difference(){
 		translate([40,0,1.5]){
 			minkowski() {
-				cube([13,100,.1], center=true);
+				cube([13,125,.1], center=true);
 				rotate([90,0,0]) cylinder(d=2.9);
 			}
 			rotate([0,90,0]) {
 				difference() {
 					union() {
-						translate([-4.5,-47,-5]){
+						translate([-4.5,-61,-5]){
 							cylinder(d=hinge_outer_diameter, h=hinge_cut_width-0.2);
 							translate([0,-hinge_outer_diameter/2,0]) cube([hinge_outer_diameter/2,hinge_outer_diameter,hinge_length/2]);
 						}
 					}
-					translate([-4.5,-47,-5.5]) cylinder(d=hinge_inner_diameter, h=hinge_length/2+1); 
+					translate([-4.5,-61,-5.5]) cylinder(d=hinge_inner_diameter, h=hinge_length/2+1); 
 				}
 			}
 		}
 		hull(){
-				translate([40,-40,-0]) cylinder(d=3, h=3+1); 
-				translate([40,-10,-0]) cylinder(d=3, h=3+1);
+				translate([40,-55,-0]) cylinder(d=3, h=3+1); 
+				translate([40,-3,-0]) cylinder(d=3, h=3+1);
 		}
 		hull(){
-				translate([40,40,-0]) cylinder(d=3, h=3+1); 
-				translate([40,10,-0]) cylinder(d=3, h=3+1);
+				translate([40,55,-0]) cylinder(d=3, h=3+1); 
+				translate([40,3,-0]) cylinder(d=3, h=3+1);
 		}
 	}
 }
@@ -172,18 +171,18 @@ module side_rear() {
     difference(){
         hull(){
 			translate([60,-45,-0]) cylinder(d=2.9, h=6); 
-			translate([60,-35,-0]) cylinder(d=2.9, h=6);
+			translate([60,-40,-0]) cylinder(d=2.9, h=6);
         }
-        translate([60,-40,-0.5]){
+        translate([60,-42.5,-0.5]){
             cylinder(d=1.5, h=7); 
         }
     }
     difference(){
         hull(){
-			translate([60,5,-0]) cylinder(d=2.9, h=6); 
+			translate([60,10,-0]) cylinder(d=2.9, h=6); 
 			translate([60,15,-0]) cylinder(d=2.9, h=6);
         }
-        translate([60,10,-0.5]){
+       translate([60,12.5,-0.5]){
             cylinder(d=1.5, h=7); 
         }            
     }
