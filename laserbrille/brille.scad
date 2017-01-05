@@ -125,28 +125,27 @@ module main_frame() {
 module side_front() {
 	difference(){
 		translate([40,0,1.5]){
-			minkowski() {
-				cube([13,125,.1], center=true);
+			minkowski() {cube([13,110,.1], center=true);
 				rotate([90,0,0]) cylinder(d=2.9);
 			}
 			rotate([0,90,0]) {
 				difference() {
 					union() {
-						translate([-4.5,-61,-5]){
+						translate([-4.5,-52.75,-5]){
 							cylinder(d=hinge_outer_diameter, h=hinge_cut_width-0.2);
 							translate([0,-hinge_outer_diameter/2,0]) cube([hinge_outer_diameter/2,hinge_outer_diameter,hinge_length/2]);
 						}
 					}
-					translate([-4.5,-61,-5.5]) cylinder(d=hinge_inner_diameter, h=hinge_length/2+1); 
+					translate([-4.5,-52.75,-5.5]) cylinder(d=hinge_inner_diameter, h=hinge_length/2+1); 
 				}
 			}
 		}
 		hull(){
-				translate([40,-55,-0]) cylinder(d=3, h=3+1); 
+				translate([40,-48.5,-0]) cylinder(d=3, h=3+1); 
 				translate([40,-3,-0]) cylinder(d=3, h=3+1);
 		}
 		hull(){
-				translate([40,55,-0]) cylinder(d=3, h=3+1); 
+				translate([40,48.5,-0]) cylinder(d=3, h=3+1); 
 				translate([40,3,-0]) cylinder(d=3, h=3+1);
 		}
 	}
@@ -160,33 +159,45 @@ module side_rear() {
 		}
 	}
 	translate([60+side_ear_radius+12.9/2,20,1.5]) intersection() {
-		rotate_extrude() {
+		rotate_extrude(angle = 360) {
 			hull() {
 				translate([side_ear_radius,0,0]) circle(d=3);
 				translate([side_ear_radius+12.9,0,0]) circle(d=3);
 			}
 		}
-		translate([-100/2,0,-100/2]) cube([100,100,100]);
+		translate([-100/2,0,-100/2])cube([50,100,100]);
+	}
+	translate([90,46.4,1.5]){
+		rotate([0,0,90]) {
+			minkowski() {
+				cube([13,10,.1], center=true);
+				rotate([90,0,0]) cylinder(d=2.9);
+			}
+		}
 	}
     difference(){
         hull(){
-			translate([60,-45,-0]) cylinder(d=2.9, h=6); 
-			translate([60,-40,-0]) cylinder(d=2.9, h=6);
+			translate([60,-45,-0]) cylinder(d=2.9, h=5.5); 
+			translate([60,-40,-0]) cylinder(d=2.9, h=5.5);
         }
-        translate([60,-42.5,-0.5]){
-            cylinder(d=1.5, h=7); 
+        translate([60,-42.5,-1]){
+            cylinder(d=1.5, h=8); 
         }
     }
     difference(){
         hull(){
-			translate([60,10,-0]) cylinder(d=2.9, h=6); 
-			translate([60,15,-0]) cylinder(d=2.9, h=6);
+			translate([60,10,-0]) cylinder(d=2.9, h=5.5); 
+			translate([60,15,-0]) cylinder(d=2.9, h=5.5);
         }
-       translate([60,12.5,-0.5]){
-            cylinder(d=1.5, h=7); 
+       translate([60,12.5,-1]){
+            cylinder(d=1.5, h=8); 
         }            
     }
 }
+
 main_frame();
-for(a=[0,180]) rotate([0,0,a]) side_front();
-for(a=[0,180]) rotate([0,0,a]) side_rear();
+
+translate([-100,-10,-0])mirror(v = [0,180,0]) side_front();
+translate([-100,-30,-0])mirror(v = [0,180,0]) side_rear();
+translate([100,-30,-0])rotate([0,0,180]) side_rear();
+translate([20,0,-0]) side_front();
